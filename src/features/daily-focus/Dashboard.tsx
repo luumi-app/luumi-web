@@ -349,7 +349,7 @@ export const Dashboard: React.FC = () => {
               />
 
               {/* Daily Task List Grouped by Time Blocks */}
-              {isLoading ? (
+              {isLoading && dailyTasks.length === 0 ? (
                 <div className="space-y-3">
                   <div className="h-16 rounded-2xl skeleton-shimmer border border-[#E4E4E7]" />
                   <div className="h-16 rounded-2xl skeleton-shimmer border border-[#E4E4E7]" />
