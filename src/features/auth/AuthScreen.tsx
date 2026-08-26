@@ -11,7 +11,6 @@ import {
   Eye,
   EyeOff,
   AlertCircle,
-  CheckCircle2,
   X,
 } from 'lucide-react'
 
@@ -60,7 +59,6 @@ export const AuthScreen: React.FC = () => {
             callback: async (response: { credential?: string }) => {
               if (response.credential) {
                 try {
-                  // Decode JWT payload from Google Identity token
                   const base64Url = response.credential.split('.')[1]
                   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
                   const jsonPayload = decodeURIComponent(
@@ -97,7 +95,6 @@ export const AuthScreen: React.FC = () => {
       return
     }
 
-    // Basic email format validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(normalizedEmail)) {
       setError('Please enter a valid email address.')
@@ -140,7 +137,6 @@ export const AuthScreen: React.FC = () => {
     if (clientId && window.google?.accounts?.id) {
       window.google.accounts.id.prompt()
     } else {
-      // If Google Client ID is not yet provided, open instant Google Sign-In prompt
       setIsGoogleModalOpen(true)
     }
   }
@@ -362,7 +358,7 @@ export const AuthScreen: React.FC = () => {
         </div>
       </div>
 
-      {/* Google Account Modal (Fallback for instant Google Sign-In) */}
+      {/* Google Account Modal */}
       {isGoogleModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fadeIn">
           <div className="bg-white w-full max-w-sm rounded-2xl p-6 border border-[#E4E4E7] shadow-xl space-y-4 relative">
