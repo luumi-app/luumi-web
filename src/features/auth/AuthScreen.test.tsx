@@ -28,9 +28,21 @@ describe('AuthScreen', () => {
     const googleBtn = screen.getByRole('button', { name: /Continue with Google/i })
     fireEvent.click(googleBtn)
 
+    // Fill in Google modal
+    fireEvent.change(screen.getByPlaceholderText('e.g. Azzam Fathurrahman'), {
+      target: { value: 'Azzam Fathurrahman' },
+    })
+    fireEvent.change(screen.getByPlaceholderText('your.email@gmail.com'), {
+      target: { value: 'azzam@gmail.com' },
+    })
+
+    const modalSubmitBtn = screen.getAllByRole('button', { name: /Continue with Google/i })[1]
+    fireEvent.click(modalSubmitBtn)
+
     expect(googleSpy).toHaveBeenCalledWith(
       expect.objectContaining({
-        email: expect.any(String),
+        email: 'azzam@gmail.com',
+        fullName: 'Azzam Fathurrahman',
       })
     )
   })
