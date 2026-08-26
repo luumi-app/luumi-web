@@ -78,7 +78,7 @@ export function useFocusPictureInPicture(): UseFocusPipReturn {
       pipWindow.document.body.style.margin = '0'
       pipWindow.document.body.style.padding = '0'
       pipWindow.document.body.style.backgroundColor = '#FBFBFA'
-      pipWindow.document.title = 'Luumi Focus Mini'
+      pipWindow.document.title = 'Luumi'
 
       // Listen for when the user closes the PiP window directly
       pipWindow.addEventListener('pagehide', () => {

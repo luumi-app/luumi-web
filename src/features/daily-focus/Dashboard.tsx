@@ -141,9 +141,11 @@ export const Dashboard: React.FC = () => {
               onClick={() => setViewMode('DAILY')}
               className="flex items-center gap-2 cursor-pointer focus:outline-none"
             >
-              <div className="w-8 h-8 rounded-lg bg-[#111111] text-white flex items-center justify-center font-bold text-sm">
-                L
-              </div>
+              <img
+                src="/logo.png"
+                alt="Luumi Logo"
+                className="w-8 h-8 rounded-xl object-contain shadow-2xs"
+              />
               <span className="font-bold text-base tracking-tight text-[#111111]">
                 Luumi
               </span>

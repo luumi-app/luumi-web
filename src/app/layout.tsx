@@ -13,8 +13,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Luumi — Energy-Aware Productivity & Focus Platform",
-  description: "An intelligent, AI-driven, energy-aware task management and deep work platform.",
+  title: "Luumi",
+  description: "Energy-aware productivity & distraction-free deep focus.",
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({

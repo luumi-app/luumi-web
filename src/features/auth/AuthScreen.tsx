@@ -203,10 +203,12 @@ export const AuthScreen: React.FC = () => {
     <div className="min-h-screen bg-[#FBFBFA] flex flex-col items-center justify-center p-4 sm:p-6 text-[#111111] animate-smooth-fade">
       <div className="w-full max-w-md luumi-card p-6 sm:p-8 border border-[#E4E4E7] shadow-sm space-y-5">
         {/* Minimalist Logo & App Heading */}
-        <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-2xl bg-[#111111] text-white flex items-center justify-center mx-auto font-bold text-xl tracking-tight shadow-xs">
-            L
-          </div>
+        <div className="text-center space-y-2.5">
+          <img
+            src="/logo.png"
+            alt="Luumi Logo"
+            className="w-14 h-14 rounded-2xl object-contain mx-auto shadow-sm"
+          />
           <h1 className="text-2xl font-bold tracking-tight text-[#111111]">
             Luumi
           </h1>
