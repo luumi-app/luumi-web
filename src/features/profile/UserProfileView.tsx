@@ -49,14 +49,9 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({
             {firstName.charAt(0)}
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-base sm:text-lg font-bold text-[#111111] tracking-tight">
-                {firstName}
-              </h1>
-              <span className="px-2 py-0.5 rounded-md bg-[#F4F4F5] border border-[#E4E4E7] text-[10px] font-mono font-bold text-[#71717A]">
-                GOOGLE AUTH
-              </span>
-            </div>
+            <h1 className="text-base sm:text-lg font-bold text-[#111111] tracking-tight">
+              {firstName}
+            </h1>
             <p className="text-xs text-[#71717A] mt-0.5">{userEmail}</p>
             <div className="flex items-center gap-2 mt-1.5 text-[11px] text-[#A1A1AA]">
               <span>Mindful energy productivity enabled</span>

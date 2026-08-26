@@ -389,11 +389,6 @@ export const AuthScreen: React.FC = () => {
             )}
           </button>
         </form>
-
-        {/* Footer info */}
-        <div className="pt-3 border-t border-[#E4E4E7] text-center text-[10px] font-mono text-[#A1A1AA]">
-          Direct Database Sync • Secure BCrypt Hash • JWT Bearer
-        </div>
       </div>
 
       {/* Google Account Modal */}
