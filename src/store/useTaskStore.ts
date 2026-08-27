@@ -16,6 +16,7 @@ interface TaskState {
   viewMode: DashboardViewMode
   isLoading: boolean
   isAiGenerating: boolean
+  generatingGoal: string | null
   analytics: TaskAnalytics | null
   setSelectedDate: (date: string) => void
   setViewMode: (mode: DashboardViewMode) => void
@@ -69,6 +70,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
   viewMode: 'DAILY',
   isLoading: false,
   isAiGenerating: false,
+  generatingGoal: null,
   analytics: null,
 
   setSelectedDate: (date: string) => set({ selectedDate: date }),
@@ -150,12 +152,13 @@ export const useTaskStore = create<TaskState>((set, get) => ({
   },
 
   generateAiTask: async (payload: GenerateTaskAiRequest) => {
-    set({ isAiGenerating: true })
+    set({ isAiGenerating: true, generatingGoal: payload.goal })
     try {
       const newTask = await api.post<Task>('/api/v1/tasks/ai-generate', payload)
       set((state) => ({
         tasks: mergeUniqueTasks(state.tasks, newTask),
         isAiGenerating: false,
+        generatingGoal: null,
       }))
       api
         .get<TaskAnalytics>('/api/v1/tasks/analytics')
@@ -163,7 +166,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
         .catch(() => {})
       return newTask
     } catch (error) {
-      set({ isAiGenerating: false })
+      set({ isAiGenerating: false, generatingGoal: null })
       throw error
     }
   },

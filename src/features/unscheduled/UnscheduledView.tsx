@@ -3,7 +3,7 @@
 import React from 'react'
 import type { Task, GenerateTaskAiRequest, EnergyCondition, EnergyLevel } from '@/types'
 import { TaskItem, CreateTaskInline } from '@/features/tasks'
-import { Inbox, Compass, SlidersHorizontal } from 'lucide-react'
+import { Inbox, Compass, SlidersHorizontal, Loader2 } from 'lucide-react'
 import { sortTasksByEnergy } from '@/lib/energyFilter'
 
 interface UnscheduledViewProps {
@@ -18,6 +18,8 @@ interface UnscheduledViewProps {
   onDelete?: (taskId: string) => void
   onEdit?: (task: Task) => void
   onAddTask: (payload: GenerateTaskAiRequest) => Promise<unknown> | void
+  isAiGenerating?: boolean
+  generatingGoal?: string | null
 }
 
 const ENERGY_SECTIONS: { key: EnergyLevel; label: string; symbol: string }[] = [
@@ -38,6 +40,8 @@ export const UnscheduledView: React.FC<UnscheduledViewProps> = ({
   onDelete,
   onEdit,
   onAddTask,
+  isAiGenerating = false,
+  generatingGoal = null,
 }) => {
   const completedCount = tasks.filter((t) => t.isCompleted).length
   const totalCount = tasks.length
@@ -106,6 +110,29 @@ export const UnscheduledView: React.FC<UnscheduledViewProps> = ({
         onSubmit={onAddTask}
         placeholderText="Add an unscheduled / anytime task..."
       />
+
+      {/* Inline Loading Card When Decomposition is Generating */}
+      {isAiGenerating && (
+        <div className="luumi-card p-4 rounded-2xl border border-[#E4E4E7] bg-[#FFFFFF] shadow-sm space-y-3 animate-fadeIn">
+          <div className="flex items-center gap-3">
+            <Loader2 className="w-4 h-4 animate-spin text-[#111111] shrink-0" />
+            <div className="min-w-0 flex-1">
+              <h4 className="text-xs font-bold text-[#111111]">
+                Structuring objective & steps...
+              </h4>
+              {generatingGoal && (
+                <p className="text-[11px] text-[#71717A] truncate mt-0.5 font-medium">
+                  {generatingGoal}
+                </p>
+              )}
+            </div>
+          </div>
+          <div className="space-y-2 pt-1 border-t border-[#F4F4F5]">
+            <div className="h-8 rounded-xl skeleton-shimmer border border-[#E4E4E7]" />
+            <div className="h-8 rounded-xl skeleton-shimmer border border-[#E4E4E7]" />
+          </div>
+        </div>
+      )}
 
       {/* Task List Grouped by Energy with Dividers */}
       {tasks.length === 0 ? (

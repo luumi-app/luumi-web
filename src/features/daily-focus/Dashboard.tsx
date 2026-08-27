@@ -41,6 +41,7 @@ export const Dashboard: React.FC = () => {
     viewMode,
     isLoading,
     isAiGenerating,
+    generatingGoal,
     setSelectedDate,
     setViewMode,
     fetchTasks,
@@ -350,20 +351,25 @@ export const Dashboard: React.FC = () => {
                 onSubmit={generateAiTask}
               />
 
-              {/* Inline Loading Card When AI Decomposition is Generating */}
+              {/* Inline Loading Card When Decomposition is Generating */}
               {isAiGenerating && (
-                <div className="luumi-card p-4.5 rounded-2xl border border-[#111111] bg-[#FFFFFF] shadow-sm space-y-3 animate-fadeIn">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-xs font-bold text-[#111111]">
-                      <Sparkles className="w-4 h-4 text-[#111111] animate-pulse" />
-                      <Loader2 className="w-3.5 h-3.5 animate-spin text-[#111111]" />
-                      <span>Structuring actionable steps & energy profile...</span>
+                <div className="luumi-card p-4 rounded-2xl border border-[#E4E4E7] bg-[#FFFFFF] shadow-sm space-y-3 animate-fadeIn">
+                  <div className="flex items-center gap-3">
+                    <Loader2 className="w-4 h-4 animate-spin text-[#111111] shrink-0" />
+                    <div className="min-w-0 flex-1">
+                      <h4 className="text-xs font-bold text-[#111111]">
+                        Structuring objective & steps...
+                      </h4>
+                      {generatingGoal && (
+                        <p className="text-[11px] text-[#71717A] truncate mt-0.5 font-medium">
+                          {generatingGoal}
+                        </p>
+                      )}
                     </div>
-                    <span className="text-[10px] text-[#71717A] font-mono">Gemini AI</span>
                   </div>
-                  <div className="space-y-2 pt-1">
-                    <div className="h-10 rounded-xl skeleton-shimmer border border-[#E4E4E7]" />
-                    <div className="h-10 rounded-xl skeleton-shimmer border border-[#E4E4E7]" />
+                  <div className="space-y-2 pt-1 border-t border-[#F4F4F5]">
+                    <div className="h-8 rounded-xl skeleton-shimmer border border-[#E4E4E7]" />
+                    <div className="h-8 rounded-xl skeleton-shimmer border border-[#E4E4E7]" />
                   </div>
                 </div>
               )}
@@ -443,6 +449,8 @@ export const Dashboard: React.FC = () => {
             onDelete={deleteTask}
             onEdit={(t) => setEditingTask(t)}
             onAddTask={generateAiTask}
+            isAiGenerating={isAiGenerating}
+            generatingGoal={generatingGoal}
           />
         ) : viewMode === 'PROFILE' ? (
           /* Dedicated User Profile & Energy Rhythm Page (Gateway to Backlog) */
