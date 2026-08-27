@@ -17,7 +17,7 @@ describe('AuthScreen', () => {
     const createAccountTab = screen.getByRole('button', { name: /^Create Account$/i })
     fireEvent.click(createAccountTab)
 
-    expect(screen.getByPlaceholderText('e.g. Azzam Fathurrahman')).toBeInTheDocument()
+    expect(screen.getByPlaceholderText('e.g. Jane Doe')).toBeInTheDocument()
     expect(screen.getByPlaceholderText('Minimum 6 characters')).toBeInTheDocument()
   })
 
@@ -29,7 +29,7 @@ describe('AuthScreen', () => {
     fireEvent.click(googleBtn)
 
     // Fill in Google modal
-    fireEvent.change(screen.getByPlaceholderText('e.g. Azzam Fathurrahman'), {
+    fireEvent.change(screen.getByPlaceholderText('e.g. Jane Doe'), {
       target: { value: 'Azzam Fathurrahman' },
     })
     fireEvent.change(screen.getByPlaceholderText('your.email@gmail.com'), {
@@ -75,7 +75,7 @@ describe('AuthScreen', () => {
     const createAccountTab = screen.getByRole('button', { name: /^Create Account$/i })
     fireEvent.click(createAccountTab)
 
-    fireEvent.change(screen.getByPlaceholderText('e.g. Azzam Fathurrahman'), {
+    fireEvent.change(screen.getByPlaceholderText('e.g. Jane Doe'), {
       target: { value: 'Azzam Fathurrahman' },
     })
     fireEvent.change(screen.getByPlaceholderText('name@example.com'), {

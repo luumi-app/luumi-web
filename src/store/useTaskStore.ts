@@ -31,6 +31,9 @@ interface TaskState {
   removeSubtask: (taskId: string, subtaskIndex: number) => void
   rebalanceTasks: (taskIdsToMoveToAnytime: string[]) => void
   toggleSubtask: (taskId: string, subtaskIndex: number) => void
+  upsertTaskFromRealtime: (task: Task) => void
+  deleteTaskFromRealtime: (taskId: string) => void
+  setTasksFromRealtime: (tasks: Task[]) => void
   getDailyTasks: () => Task[]
   getUnscheduledTasks: () => Task[]
   getBacklogTasks: () => Task[]
@@ -250,6 +253,30 @@ export const useTaskStore = create<TaskState>((set, get) => ({
         return { ...t, subTasks: newSubTasks }
       }),
     }))
+  },
+
+  upsertTaskFromRealtime: (task: Task) => {
+    set((state) => {
+      const exists = state.tasks.some((t) => t.id === task.id)
+      if (exists) {
+        return {
+          tasks: state.tasks.map((t) => (t.id === task.id ? task : t)),
+        }
+      }
+      return {
+        tasks: [task, ...state.tasks],
+      }
+    })
+  },
+
+  deleteTaskFromRealtime: (taskId: string) => {
+    set((state) => ({
+      tasks: state.tasks.filter((t) => t.id !== taskId),
+    }))
+  },
+
+  setTasksFromRealtime: (tasks: Task[]) => {
+    set({ tasks })
   },
 
   getDailyTasks: () => {
