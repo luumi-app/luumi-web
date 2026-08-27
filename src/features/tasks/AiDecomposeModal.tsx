@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import type { GenerateTaskAiRequest, TimePeriod } from '../../types'
 import { X, Calendar, Clock, Loader2 } from 'lucide-react'
 
@@ -8,17 +8,27 @@ interface AiDecomposeModalProps {
   isOpen: boolean
   onClose: () => void
   onSubmit: (payload: GenerateTaskAiRequest) => Promise<unknown> | void
+  selectedDate?: string | null
 }
 
 export const AiDecomposeModal: React.FC<AiDecomposeModalProps> = ({
   isOpen,
   onClose,
   onSubmit,
+  selectedDate,
 }) => {
   const [goal, setGoal] = useState('')
-  const [targetDate, setTargetDate] = useState<string>('')
+  const [targetDate, setTargetDate] = useState<string>(selectedDate || '')
   const [timePref, setTimePref] = useState<TimePeriod>('ANYTIME')
   const [isProcessing, setIsProcessing] = useState(false)
+
+  useEffect(() => {
+    if (isOpen) {
+      setTargetDate(selectedDate || '')
+      setTimePref('ANYTIME')
+      setGoal('')
+    }
+  }, [isOpen, selectedDate])
 
   if (!isOpen) return null
 

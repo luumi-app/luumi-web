@@ -458,6 +458,7 @@ export const Dashboard: React.FC = () => {
         isOpen={isAiModalOpen}
         onClose={() => setIsAiModalOpen(false)}
         onSubmit={generateAiTask}
+        selectedDate={selectedDate}
       />
 
       <SmartRebalanceModal
