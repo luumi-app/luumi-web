@@ -315,7 +315,7 @@ export const AuthScreen: React.FC = () => {
                   required
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  placeholder="e.g. Azzam Fathurrahman"
+                  placeholder="e.g. Jane Doe"
                   className="w-full pl-10 pr-4 py-2.5 bg-[#FAFAFA] border border-[#E4E4E7] rounded-xl text-xs text-[#111111] placeholder-[#A1A1AA] focus:outline-none focus:border-[#111111] focus:bg-white transition-all font-medium"
                 />
               </div>
@@ -436,7 +436,7 @@ export const AuthScreen: React.FC = () => {
                   required
                   value={googleName}
                   onChange={(e) => setGoogleName(e.target.value)}
-                  placeholder="e.g. Azzam Fathurrahman"
+                  placeholder="e.g. Jane Doe"
                   className="w-full px-3 py-2 bg-[#FAFAFA] border border-[#E4E4E7] rounded-xl text-xs text-[#111111] focus:outline-none focus:border-[#111111] font-medium"
                 />
               </div>
