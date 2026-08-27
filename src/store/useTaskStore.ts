@@ -41,6 +41,28 @@ interface TaskState {
 
 const getTodayString = () => new Date().toISOString().split('T')[0]
 
+/**
+ * Deduplicates and merges tasks by ID to strictly guarantee zero duplicate renders
+ */
+const mergeUniqueTasks = (existing: Task[], incoming: Task | Task[]): Task[] => {
+  const incomingList = Array.isArray(incoming) ? incoming : [incoming]
+  const map = new Map<string, Task>()
+
+  // Incoming tasks take priority (latest state)
+  incomingList.forEach((t) => {
+    if (t && t.id) map.set(t.id, t)
+  })
+
+  // Retain existing tasks that are not overwritten
+  existing.forEach((t) => {
+    if (t && t.id && !map.has(t.id)) {
+      map.set(t.id, t)
+    }
+  })
+
+  return Array.from(map.values())
+}
+
 export const useTaskStore = create<TaskState>((set, get) => ({
   tasks: [],
   selectedDate: getTodayString(),
@@ -59,7 +81,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
         api.get<Task[]>('/api/v1/tasks'),
         api.get<TaskAnalytics>('/api/v1/tasks/analytics'),
       ])
-      set({ tasks, analytics, isLoading: false })
+      set({ tasks: mergeUniqueTasks([], tasks), analytics, isLoading: false })
     } catch {
       set({ isLoading: false })
     }
@@ -67,14 +89,9 @@ export const useTaskStore = create<TaskState>((set, get) => ({
 
   createTask: async (payload: CreateTaskRequest) => {
     const newTask = await api.post<Task>('/api/v1/tasks', payload)
-    set((state) => {
-      const exists = state.tasks.some((t) => t.id === newTask.id)
-      return {
-        tasks: exists
-          ? state.tasks.map((t) => (t.id === newTask.id ? newTask : t))
-          : [newTask, ...state.tasks],
-      }
-    })
+    set((state) => ({
+      tasks: mergeUniqueTasks(state.tasks, newTask),
+    }))
     // Refresh analytics in background
     api
       .get<TaskAnalytics>('/api/v1/tasks/analytics')
@@ -136,15 +153,10 @@ export const useTaskStore = create<TaskState>((set, get) => ({
     set({ isAiGenerating: true })
     try {
       const newTask = await api.post<Task>('/api/v1/tasks/ai-generate', payload)
-      set((state) => {
-        const exists = state.tasks.some((t) => t.id === newTask.id)
-        return {
-          tasks: exists
-            ? state.tasks.map((t) => (t.id === newTask.id ? newTask : t))
-            : [newTask, ...state.tasks],
-          isAiGenerating: false,
-        }
-      })
+      set((state) => ({
+        tasks: mergeUniqueTasks(state.tasks, newTask),
+        isAiGenerating: false,
+      }))
       api
         .get<TaskAnalytics>('/api/v1/tasks/analytics')
         .then((analytics) => set({ analytics }))
@@ -266,17 +278,9 @@ export const useTaskStore = create<TaskState>((set, get) => ({
   },
 
   upsertTaskFromRealtime: (task: Task) => {
-    set((state) => {
-      const exists = state.tasks.some((t) => t.id === task.id)
-      if (exists) {
-        return {
-          tasks: state.tasks.map((t) => (t.id === task.id ? task : t)),
-        }
-      }
-      return {
-        tasks: [task, ...state.tasks],
-      }
-    })
+    set((state) => ({
+      tasks: mergeUniqueTasks(state.tasks, task),
+    }))
   },
 
   deleteTaskFromRealtime: (taskId: string) => {
@@ -286,7 +290,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
   },
 
   setTasksFromRealtime: (tasks: Task[]) => {
-    set({ tasks })
+    set({ tasks: mergeUniqueTasks([], tasks) })
   },
 
   getDailyTasks: () => {
