@@ -67,9 +67,14 @@ export const useTaskStore = create<TaskState>((set, get) => ({
 
   createTask: async (payload: CreateTaskRequest) => {
     const newTask = await api.post<Task>('/api/v1/tasks', payload)
-    set((state) => ({
-      tasks: [newTask, ...state.tasks],
-    }))
+    set((state) => {
+      const exists = state.tasks.some((t) => t.id === newTask.id)
+      return {
+        tasks: exists
+          ? state.tasks.map((t) => (t.id === newTask.id ? newTask : t))
+          : [newTask, ...state.tasks],
+      }
+    })
     // Refresh analytics in background
     api
       .get<TaskAnalytics>('/api/v1/tasks/analytics')
@@ -131,10 +136,15 @@ export const useTaskStore = create<TaskState>((set, get) => ({
     set({ isAiGenerating: true })
     try {
       const newTask = await api.post<Task>('/api/v1/tasks/ai-generate', payload)
-      set((state) => ({
-        tasks: [newTask, ...state.tasks],
-        isAiGenerating: false,
-      }))
+      set((state) => {
+        const exists = state.tasks.some((t) => t.id === newTask.id)
+        return {
+          tasks: exists
+            ? state.tasks.map((t) => (t.id === newTask.id ? newTask : t))
+            : [newTask, ...state.tasks],
+          isAiGenerating: false,
+        }
+      })
       api
         .get<TaskAnalytics>('/api/v1/tasks/analytics')
         .then((analytics) => set({ analytics }))
