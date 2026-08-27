@@ -23,6 +23,7 @@ import {
   Compass,
   SlidersHorizontal,
   Zap,
+  Loader2,
 } from 'lucide-react'
 import type { TimePeriod, Task } from '../../types'
 
@@ -39,6 +40,7 @@ export const Dashboard: React.FC = () => {
     selectedDate,
     viewMode,
     isLoading,
+    isAiGenerating,
     setSelectedDate,
     setViewMode,
     fetchTasks,
@@ -347,6 +349,24 @@ export const Dashboard: React.FC = () => {
                 selectedDate={selectedDate}
                 onSubmit={generateAiTask}
               />
+
+              {/* Inline Loading Card When AI Decomposition is Generating */}
+              {isAiGenerating && (
+                <div className="luumi-card p-4.5 rounded-2xl border border-[#111111] bg-[#FFFFFF] shadow-sm space-y-3 animate-fadeIn">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-xs font-bold text-[#111111]">
+                      <Sparkles className="w-4 h-4 text-[#111111] animate-pulse" />
+                      <Loader2 className="w-3.5 h-3.5 animate-spin text-[#111111]" />
+                      <span>Structuring actionable steps & energy profile...</span>
+                    </div>
+                    <span className="text-[10px] text-[#71717A] font-mono">Gemini AI</span>
+                  </div>
+                  <div className="space-y-2 pt-1">
+                    <div className="h-10 rounded-xl skeleton-shimmer border border-[#E4E4E7]" />
+                    <div className="h-10 rounded-xl skeleton-shimmer border border-[#E4E4E7]" />
+                  </div>
+                </div>
+              )}
 
               {/* Daily Task List Grouped by Time Blocks */}
               {isLoading && dailyTasks.length === 0 ? (
